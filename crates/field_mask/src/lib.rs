@@ -167,3 +167,14 @@ fn apply_path(
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_basic() {
+        // Placeholder test
+        assert!(true);
+    }
+}
