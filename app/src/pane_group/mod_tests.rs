@@ -294,23 +294,17 @@ fn test_pane_history() {
         let pane_group = mock_pane_group(&mut app, Default::default());
 
         pane_group.update(&mut app, |panes, ctx| {
-            let mut entity_ids: Vec<EntityId> =
-                panes.view_id_to_session_data.keys().cloned().collect();
-
-            let first_entity_id = entity_ids.get(0).unwrap().clone();
+            let first_entity_id = get_newly_created_pane_id(panes, &[]);
 
             // Add pane Left.
             panes.add_pane(Direction::Left, ctx);
-            entity_ids = panes.view_id_to_session_data.keys().cloned().collect();
-            entity_ids.retain(|x| *x != first_entity_id);
-            let second_entity_id = entity_ids.get(0).unwrap().clone();
+            let second_entity_id = get_newly_created_pane_id(panes, &[first_entity_id]);
+
             // Add pane Up.
             panes.add_pane(Direction::Up, ctx);
-            entity_ids = panes.view_id_to_session_data.keys().cloned().collect();
-            entity_ids.retain(|x| *x != first_entity_id && *x != second_entity_id);
-            let third_entity_id = entity_ids.get(0).unwrap().clone();
+            let third_entity_id = get_newly_created_pane_id(panes, &[first_entity_id, second_entity_id]);
 
-            assert!(panes.prev_session_id(third_entity_id).unwrap() == second_entity_id);
+            assert_eq!(panes.prev_session_id(third_entity_id).unwrap(), second_entity_id);
         })
     });
 }

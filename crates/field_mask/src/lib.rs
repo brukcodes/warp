@@ -171,10 +171,93 @@ fn apply_path(
 #[cfg(test)]
 mod tests {
     use super::*;
+    use prost::Message;
+    use prost_reflect::{DescriptorPool, MessageDescriptor};
+    use prost_types::{DescriptorProto, FieldDescriptorProto, FileDescriptorProto, FileDescriptorSet};
+
+    #[derive(Clone, PartialEq, Message, Default)]
+    pub struct TestMessage {
+        #[prost(string, tag = "1")]
+        pub name: String,
+
+        #[prost(int32, tag = "2")]
+        pub value: i32,
+    }
+
+    fn test_message_descriptor() -> MessageDescriptor {
+        let file_descriptor = FileDescriptorProto {
+            name: Some("test_message.proto".to_string()),
+            package: Some("testpkg".to_string()),
+            message_type: vec![DescriptorProto {
+                name: Some("TestMessage".to_string()),
+                field: vec![
+                    FieldDescriptorProto {
+                        name: Some("name".to_string()),
+                        number: Some(1),
+                        label: Some(FieldDescriptorProto::Label::Optional as i32),
+                        r#type: Some(FieldDescriptorProto::Type::String as i32),
+                        ..Default::default()
+                    },
+                    FieldDescriptorProto {
+                        name: Some("value".to_string()),
+                        number: Some(2),
+                        label: Some(FieldDescriptorProto::Label::Optional as i32),
+                        r#type: Some(FieldDescriptorProto::Type::Int32 as i32),
+                        ..Default::default()
+                    },
+                ],
+                ..Default::default()
+            }],
+            ..Default::default()
+        };
+        let descriptor_set = FileDescriptorSet {
+            file: vec![file_descriptor],
+        };
+        let pool = DescriptorPool::decode(descriptor_set.encode_to_vec().as_slice()).unwrap();
+        pool.get_message_by_name("testpkg.TestMessage").unwrap()
+    }
 
     #[test]
-    fn test_basic() {
-        // Placeholder test
-        assert!(true);
+    fn test_update_operation() {
+        let dest = TestMessage {
+            name: "old".to_string(),
+            value: 1,
+        };
+        let src = TestMessage {
+            name: "new".to_string(),
+            value: 2,
+        };
+        let mask = FieldMask {
+            paths: vec!["name".to_string()],
+        };
+
+        let result = FieldMaskOperation::update(test_message_descriptor(), &dest, &src, mask)
+            .apply()
+            .unwrap();
+
+        assert_eq!(result.name, "new");
+        assert_eq!(result.value, 1);
+    }
+
+    #[test]
+    fn test_append_operation() {
+        let dest = TestMessage {
+            name: "hello ".to_string(),
+            value: 1,
+        };
+        let src = TestMessage {
+            name: "world".to_string(),
+            value: 2,
+        };
+        let mask = FieldMask {
+            paths: vec!["name".to_string()],
+        };
+
+        let result = FieldMaskOperation::append(test_message_descriptor(), &dest, &src, mask)
+            .apply()
+            .unwrap();
+
+        assert_eq!(result.name, "hello world");
+        assert_eq!(result.value, 1);
     }
 }
