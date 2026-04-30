@@ -31,9 +31,21 @@
 
 You can [download Warp](https://www.warp.dev/download) and [read our docs](https://docs.warp.dev/) for platform-specific instructions.
 
+### Prerequisites for Building from Source
+
+Building Warp from source requires:
+
+- **macOS**: Xcode (automatically installed by `./script/bootstrap`)
+- **Linux**: Standard build tools like GCC/Clang (automatically installed by `./script/bootstrap`)
+- **Windows**: Visual Studio Build Tools or equivalent (automatically installed by `./script/bootstrap`)
+- **Rust**: The Rust toolchain (automatically installed by `./script/bootstrap` if not present)
+
+Note: The bootstrap script may require administrative privileges and can take several minutes to complete on first run.
+
 ## Warp Contributions Overview Dashboard
 
 Explore [build.warp.dev](https://build.warp.dev) to:
+
 - Watch thousands of Oz agents triage issues, write specs, implement changes, and review PRs
 - View top contributors and in-flight features
 - Track your own issues with GitHub sign-in
@@ -49,22 +61,21 @@ The rest of the code in this repository is licensed under the [AGPL v3](LICENSE-
 
 Warp's client codebase is open source and lives in this repository. We welcome community contributions and have designed a lightweight workflow to help new contributors get started. For the full contribution flow, read our [CONTRIBUTING.md](CONTRIBUTING.md) guide.
 
-> [!TIP]
-> **Chat with contributors and the Warp team** in the [`#oss-contributors`](https://warpcommunity.slack.com/archives/C0B0LM8N4DB) Slack channel — a good place for ad-hoc questions, design discussion, and pairing with maintainers. New here? [Join the Warp Slack community](https://go.warp.dev/join-preview) first, then jump into `#oss-contributors`.
+> [!TIP] > **Chat with contributors and the Warp team** in the [`#oss-contributors`](https://warpcommunity.slack.com/archives/C0B0LM8N4DB) Slack channel — a good place for ad-hoc questions, design discussion, and pairing with maintainers. New here? [Join the Warp Slack community](https://go.warp.dev/join-preview) first, then jump into `#oss-contributors`.
 
 ### Issue to PR
 
 Before filing, [search existing issues](https://github.com/warpdotdev/warp/issues?q=is%3Aissue+is%3Aopen+sort%3Areactions-%2B1-desc) for your bug or feature request. If nothing exists, [file an issue](https://github.com/warpdotdev/warp/issues/new/choose) using our templates. Security vulnerabilities should be reported privately as described in [CONTRIBUTING.md](CONTRIBUTING.md#reporting-security-issues).
 
-Once filed, a Warp maintainer reviews the issue and may apply a readiness label: [`ready-to-spec`](https://github.com/warpdotdev/warp/issues?q=is%3Aissue+is%3Aopen+label%3Aready-to-spec) signals the design is open for contributors to spec out, and [`ready-to-implement`](https://github.com/warpdotdev/warp/issues?q=is%3Aissue+is%3Aopen+label%3Aready-to-implement) signals the design is settled and code PRs are welcome. Anyone can pick up a labeled issue — mention **@oss-maintainers** on an issue if you'd like it considered for a readiness label.
+Once filed, a Warp maintainer reviews the issue and may apply a readiness label: [`ready-to-spec`](https://github.com/warpdotdev/warp/issues?q=is%3Aissue+is%3Aopen+label%3Aready-to-spec) signals the design is open for contributors to specify, and [`ready-to-implement`](https://github.com/warpdotdev/warp/issues?q=is%3Aissue+is%3Aopen+label%3Aready-to-implement) signals the design is settled and code PRs are welcome. Anyone can pick up a labeled issue — mention **@oss-maintainers** on an issue if you'd like it considered for a readiness label.
 
 ### Building the Repo Locally
 
 To build and run Warp from source:
 
 ```bash
-./script/bootstrap   # platform-specific setup
-./script/run         # build and run Warp
+./script/bootstrap   # platform-specific setup (installs dependencies, may take several minutes)
+./script/run         # build and run Warp (first build can take 10-20 minutes)
 ./script/presubmit   # fmt, clippy, and tests
 ```
 
@@ -89,12 +100,12 @@ We ask everyone to be respectful and empathetic. Warp follows the [Code of Condu
 
 We'd like to call out a few of the [open source dependencies](https://docs.warp.dev/help/licenses) that have helped Warp to get off the ground:
 
-* [Tokio](https://github.com/tokio-rs/tokio)
-* [NuShell](https://github.com/nushell/nushell)
-* [Fig Completion Specs](https://github.com/withfig/autocomplete)
-* [Warp Server Framework](https://github.com/seanmonstar/warp)
-* [Alacritty](https://github.com/alacritty/alacritty)
-* [Hyper HTTP library](https://github.com/hyperium/hyper)
-* [FontKit](https://github.com/servo/font-kit)
-* [Core-foundation](https://github.com/servo/core-foundation-rs)
-* [Smol](https://github.com/smol-rs/smol)
+- [Tokio](https://github.com/tokio-rs/tokio)
+- [NuShell](https://github.com/nushell/nushell)
+- [Fig Completion Specs](https://github.com/withfig/autocomplete)
+- [Warp Server Framework](https://github.com/seanmonstar/warp)
+- [Alacritty](https://github.com/alacritty/alacritty)
+- [Hyper HTTP library](https://github.com/hyperium/hyper)
+- [FontKit](https://github.com/servo/font-kit)
+- [Core-foundation](https://github.com/servo/core-foundation-rs)
+- [Smol](https://github.com/smol-rs/smol)
